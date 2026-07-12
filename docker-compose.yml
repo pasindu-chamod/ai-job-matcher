@@ -1,0 +1,102 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: jobmatcher-db
+    environment:
+      POSTGRES_DB: jobmatcher
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - jobmatcher-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: jobmatcher-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - jobmatcher-network
+
+  resume-service:
+    build: ./resume-service
+    container_name: jobmatcher-resume-service
+    ports:
+      - "8001:8001"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-sk-dummy-key}
+    networks:
+      - jobmatcher-network
+
+  matching-service:
+    build: ./matching-service
+    container_name: jobmatcher-matching-service
+    ports:
+      - "8002:8002"
+    networks:
+      - jobmatcher-network
+
+  blockchain-service:
+    build: ./blockchain-service
+    container_name: jobmatcher-blockchain-service
+    ports:
+      - "8003:8003"
+    networks:
+      - jobmatcher-network
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: jobmatcher-api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/jobmatcher
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres123
+      - SPRING_REDIS_HOST=redis
+      - PYTHON_RESUME_SERVICE_URL=http://resume-service:8001
+      - PYTHON_MATCHING_SERVICE_URL=http://matching-service:8002
+      - PYTHON_BLOCKCHAIN_SERVICE_URL=http://blockchain-service:8003
+    networks:
+      - jobmatcher-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      resume-service:
+        condition: service_started
+      matching-service:
+        condition: service_started
+      blockchain-service:
+        condition: service_started
+
+  frontend:
+    build: ./frontend
+    container_name: jobmatcher-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://localhost:8080/api
+    networks:
+      - jobmatcher-network
+    depends_on:
+      - api-gateway
+
+networks:
+  jobmatcher-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
