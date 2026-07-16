@@ -5,7 +5,7 @@ const Applications = () => {
   const [apps, setApps] = useState<any[]>([]);
 
   useEffect(() => {
-    applicationService.getAll().then(setApps).catch(() => {});
+    applicationService.getUserApplications().then(setApps).catch(() => {});
   }, []);
 
   const statuses = ['applied', 'interview', 'offer', 'rejected'];
