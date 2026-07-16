@@ -1,15 +1,26 @@
 package com.jobmatcher.gateway.service;
 
-import com.jobmatcher.gateway.model.Job;
-import com.jobmatcher.gateway.repository.JobRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+import com.jobmatcher.gateway.model.Job;
+import com.jobmatcher.gateway.repository.JobRepository;
+
 @Service
-@RequiredArgsConstructor
 public class JobService {
-    private final JobRepository repo;
-    public List<Job> getAll() { return repo.findByIsActiveTrue(); }
-    public Job getById(String id) { return repo.findById(id).orElse(null); }
+
+    private final JobRepository jobRepository;
+
+    public JobService(JobRepository jobRepository) {
+        this.jobRepository = jobRepository;
+    }
+
+    public List<Job> getAllJobs() {
+        return jobRepository.findAll();
+    }
+
+    public Job getJobById(String id) {
+        return jobRepository.findById(id).orElse(null);
+    }
 }
