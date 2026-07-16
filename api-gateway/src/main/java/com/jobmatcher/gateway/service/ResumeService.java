@@ -2,7 +2,6 @@ package com.jobmatcher.gateway.service;
 
 import com.jobmatcher.gateway.model.Resume;
 import com.jobmatcher.gateway.repository.ResumeRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
@@ -11,29 +10,42 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+
 import java.util.List;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 public class ResumeService {
+
     private final ResumeRepository repo;
     private final WebClient.Builder webClientBuilder;
+
     @Value("${python.resume.service.url}")
     private String resumeUrl;
 
+    public ResumeService(ResumeRepository repo, WebClient.Builder webClientBuilder) {
+        this.repo = repo;
+        this.webClientBuilder = webClientBuilder;
+    }
+
+    @SuppressWarnings("unchecked")
     public Resume uploadAndAnalyze(MultipartFile file, String userId) {
         try {
             MultipartBodyBuilder builder = new MultipartBodyBuilder();
             builder.part("file", new ByteArrayResource(file.getBytes()) {
-                @Override public String getFilename() { return file.getOriginalFilename(); }
+                @Override
+                public String getFilename() {
+                    return file.getOriginalFilename();
+                }
             }).contentType(MediaType.APPLICATION_PDF);
 
-            Map result = webClientBuilder.build().post()
+            Map<String, Object> result = webClientBuilder.build().post()
                     .uri(resumeUrl + "/analyze")
                     .contentType(MediaType.MULTIPART_FORM_DATA)
                     .body(BodyInserters.fromMultipartData(builder.build()))
-                    .retrieve().bodyToMono(Map.class).block();
+                    .retrieve()
+                    .bodyToMono(Map.class)
+                    .block();
 
             Resume resume = new Resume();
             resume.setUserId(userId);
@@ -45,7 +57,7 @@ public class ResumeService {
             resume.setSummary((String) result.get("summary"));
             return repo.save(resume);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to analyze resume: " + e.getMessage());
+            throw new RuntimeException("Failed: " + e.getMessage());
         }
     }
 
