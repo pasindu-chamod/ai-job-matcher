@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import ResumeUpload from './pages/ResumeUpload';
 import JobMatches from './pages/JobMatches';
+import JobDetail from './pages/JobDetail';
 import Applications from './pages/Applications';
 import SkillVerification from './pages/SkillVerification';
 
@@ -16,6 +17,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/upload" element={<ResumeUpload />} />
             <Route path="/matches" element={<JobMatches />} />
+            <Route path="/jobs/:id" element={<JobDetail />} />
             <Route path="/applications" element={<Applications />} />
             <Route path="/verify" element={<SkillVerification />} />
           </Routes>

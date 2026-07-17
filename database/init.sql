@@ -1,7 +1,7 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE IF NOT EXISTS resumes (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4()::text,
     user_id VARCHAR(255) NOT NULL,
     file_name VARCHAR(500) NOT NULL,
     file_url TEXT,
@@ -14,25 +14,25 @@ CREATE TABLE IF NOT EXISTS resumes (
 );
 
 CREATE TABLE IF NOT EXISTS resume_skills (
-    resume_id UUID REFERENCES resumes(id) ON DELETE CASCADE,
+    resume_id VARCHAR(36) REFERENCES resumes(id) ON DELETE CASCADE,
     skill VARCHAR(255) NOT NULL,
     PRIMARY KEY (resume_id, skill)
 );
 
 CREATE TABLE IF NOT EXISTS resume_strengths (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    resume_id UUID REFERENCES resumes(id) ON DELETE CASCADE,
+    id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4()::text,
+    resume_id VARCHAR(36) REFERENCES resumes(id) ON DELETE CASCADE,
     strength TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS resume_suggestions (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    resume_id UUID REFERENCES resumes(id) ON DELETE CASCADE,
+    id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4()::text,
+    resume_id VARCHAR(36) REFERENCES resumes(id) ON DELETE CASCADE,
     suggestion TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS jobs (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4()::text,
     title VARCHAR(500) NOT NULL,
     company VARCHAR(500) NOT NULL,
     description TEXT,
@@ -44,15 +44,15 @@ CREATE TABLE IF NOT EXISTS jobs (
 );
 
 CREATE TABLE IF NOT EXISTS job_required_skills (
-    job_id UUID REFERENCES jobs(id) ON DELETE CASCADE,
+    job_id VARCHAR(36) REFERENCES jobs(id) ON DELETE CASCADE,
     skill VARCHAR(255) NOT NULL,
     PRIMARY KEY (job_id, skill)
 );
 
 CREATE TABLE IF NOT EXISTS applications (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4()::text,
     user_id VARCHAR(255) NOT NULL,
-    job_id UUID REFERENCES jobs(id) ON DELETE CASCADE,
+    job_id VARCHAR(36) REFERENCES jobs(id) ON DELETE CASCADE,
     status VARCHAR(50) DEFAULT 'applied',
     match_score INTEGER,
     applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
