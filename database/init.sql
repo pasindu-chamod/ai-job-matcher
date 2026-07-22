@@ -1,5 +1,26 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+CREATE TABLE IF NOT EXISTS users (
+    id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4()::text,
+    full_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role VARCHAR(20) NOT NULL DEFAULT 'USER',
+    active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Default admin account: admin@jobmatcher.com / Admin@123
+-- IMPORTANT: log in and change this password immediately after first setup.
+INSERT INTO users (full_name, email, password_hash, role)
+VALUES (
+    'Admin',
+    'admin@jobmatcher.com',
+    '$2b$10$ftj2x88i4y8jc8z1waxdQO/L6ZPEYD12o6Rt.L5JHhUK/gxcrMQKG',
+    'ADMIN'
+)
+ON CONFLICT (email) DO NOTHING;
+
 CREATE TABLE IF NOT EXISTS resumes (
     id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4()::text,
     user_id VARCHAR(255) NOT NULL,

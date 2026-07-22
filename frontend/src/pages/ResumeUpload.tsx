@@ -13,7 +13,7 @@ const ResumeUpload = () => {
     setLoading(true);
     setError('');
     try {
-      const data = await resumeService.uploadResume(file, 'user123');
+      const data = await resumeService.uploadResume(file);
       setResult(data);
     } catch (e: any) {
       setError('Upload failed. Make sure backend is running.');

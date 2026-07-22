@@ -12,7 +12,7 @@ const SkillVerification: React.FC = () => {
     if (!skill) return;
     setVerifying(true);
     try {
-      const result = await blockchainService.verifySkill('user123', skill);
+      const result = await blockchainService.verifySkill(skill);
       setVerification(result);
     } catch (error) {
       console.error(error);

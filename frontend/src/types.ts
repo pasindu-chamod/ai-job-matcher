@@ -44,3 +44,27 @@ export interface SkillVerification {
   blockchainHash: string;
   issuedAt: string;
 }
+
+export type Role = 'USER' | 'ADMIN';
+
+export interface User {
+  id: string;
+  fullName: string;
+  email: string;
+  role: Role;
+  active: boolean;
+  createdAt: string;
+}
+
+export interface AuthResponse {
+  token: string;
+  user: User;
+}
+
+export interface AdminStats {
+  totalUsers: number;
+  adminUsers: number;
+  activeUsers: number;
+  totalJobs: number;
+  totalApplications: number;
+}
