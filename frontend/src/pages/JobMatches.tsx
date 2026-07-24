@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { MapPin, DollarSign } from 'lucide-react';
 import { matchService } from '../services/api';
@@ -6,6 +7,7 @@ import { JobMatch } from '../types';
 const JobMatches = () => {
   const [matches, setMatches] = useState<JobMatch[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     matchService.getMatches()
@@ -23,7 +25,11 @@ const JobMatches = () => {
 
       <div className="space-y-4">
         {matches.map((match, idx) => (
-          <div key={idx} className="bg-white p-6 rounded-lg shadow">
+          <div
+            key={idx}
+            onClick={() => navigate(`/jobs/${match.job.id}`, { state: { match } })}
+            className="bg-white p-6 rounded-lg shadow cursor-pointer hover:shadow-md hover:ring-1 hover:ring-blue-200 transition"
+          >
             <div className="flex justify-between items-start mb-3">
               <div>
                 <h3 className="text-xl font-bold">{match.job.title}</h3>
