@@ -1,6 +1,6 @@
-import { useState, FormEvent } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserPlus, Loader2 } from 'lucide-react';
+import { UserPlus, Loader2, User, Mail, Lock, BrainCircuit } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Register = () => {
@@ -29,90 +29,104 @@ const Register = () => {
 
     try {
       await register(fullName, email, password);
-      navigate('/', { replace: true });
+      navigate('/dashboard', { replace: true });
     } catch {
-      // error is surfaced via context
+      // Handled in context
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-8">
-      <div className="bg-white p-8 rounded-lg shadow space-y-6">
-        <div className="text-center">
-          <UserPlus className="w-10 h-10 mx-auto text-blue-600 mb-2" />
-          <h1 className="text-2xl font-bold">Create your account</h1>
-          <p className="text-gray-500 text-sm mt-1">It only takes a minute</p>
+    <div className="max-w-md mx-auto my-12">
+      <div className="glass-panel p-8 md:p-10 space-y-6 relative overflow-hidden border border-gray-700/80">
+        <div className="text-center space-y-2">
+          <div className="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+            <BrainCircuit className="w-7 h-7 text-white" />
+          </div>
+          <h1 className="text-2xl font-extrabold tracking-tight">Create Account</h1>
+          <p className="text-xs text-gray-400">Join AI Job Matcher & verify your skill passport</p>
         </div>
 
         {(error || localError) && (
-          <div className="bg-red-50 text-red-700 text-sm px-4 py-3 rounded-lg">
+          <div className="bg-red-500/10 border border-red-500/30 text-red-400 text-xs px-4 py-3 rounded-xl">
             {localError || error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Full name</label>
-            <input
-              type="text"
-              required
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Jane Doe"
-            />
+          <div className="space-y-1">
+            <label className="block text-xs font-semibold text-gray-300">Full Name</label>
+            <div className="relative">
+              <User className="w-4 h-4 absolute left-3.5 top-3.5 text-gray-400" />
+              <input
+                type="text"
+                required
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-800/60 border border-gray-700 rounded-xl text-xs text-white focus:outline-none focus:border-cyan-500"
+                placeholder="Alex Morgan"
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="you@example.com"
-            />
+          <div className="space-y-1">
+            <label className="block text-xs font-semibold text-gray-300">Email Address</label>
+            <div className="relative">
+              <Mail className="w-4 h-4 absolute left-3.5 top-3.5 text-gray-400" />
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-800/60 border border-gray-700 rounded-xl text-xs text-white focus:outline-none focus:border-cyan-500"
+                placeholder="you@example.com"
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="At least 6 characters"
-            />
+          <div className="space-y-1">
+            <label className="block text-xs font-semibold text-gray-300">Password</label>
+            <div className="relative">
+              <Lock className="w-4 h-4 absolute left-3.5 top-3.5 text-gray-400" />
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-800/60 border border-gray-700 rounded-xl text-xs text-white focus:outline-none focus:border-cyan-500"
+                placeholder="••••••••"
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Confirm password</label>
-            <input
-              type="password"
-              required
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="••••••••"
-            />
+          <div className="space-y-1">
+            <label className="block text-xs font-semibold text-gray-300">Confirm Password</label>
+            <div className="relative">
+              <Lock className="w-4 h-4 absolute left-3.5 top-3.5 text-gray-400" />
+              <input
+                type="password"
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-800/60 border border-gray-700 rounded-xl text-xs text-white focus:outline-none focus:border-cyan-500"
+                placeholder="••••••••"
+              />
+            </div>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50"
+            className="w-full gradient-btn py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50"
           >
-            {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-            {loading ? 'Creating account...' : 'Sign Up'}
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserPlus className="w-4 h-4" />}
+            {loading ? 'Creating Profile...' : 'Create Account'}
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-600">
-          Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 font-medium hover:underline">
-            Log in
+        <p className="text-center text-xs text-gray-400">
+          Already registered?{' '}
+          <Link to="/login" className="text-cyan-400 font-bold hover:underline">
+            Sign in
           </Link>
         </p>
       </div>
