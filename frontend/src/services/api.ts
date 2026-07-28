@@ -29,7 +29,8 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// If the server says our token is invalid/expired, clear local session state.
+// If the server says our token is invalid/expired → clear session.
+// If the server says 403 Forbidden → the user tried to access an admin endpoint; reject silently.
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -37,6 +38,7 @@ api.interceptors.response.use(
       localStorage.removeItem(TOKEN_KEY);
       localStorage.removeItem(USER_KEY);
     }
+    // 403 is handled at the component level via AdminRoute; no redirect needed here.
     return Promise.reject(error);
   }
 );
@@ -235,12 +237,21 @@ export const applicationService = {
   ): Promise<Application> => {
     const response = await api.post<Application>(
       '/applications',
-      {
-        jobId,
-        userId,
-      }
+      { jobId, userId }
     );
+    return response.data;
+  },
 
+  // Used in JobDetail.tsx when clicking "Apply Now"
+  applyForJob: async (
+    jobId: string,
+    matchScore: number = 0,
+    userId: string = currentUserId()
+  ): Promise<Application> => {
+    const response = await api.post<Application>(
+      '/applications',
+      { jobId, userId, matchScore }
+    );
     return response.data;
   },
 
