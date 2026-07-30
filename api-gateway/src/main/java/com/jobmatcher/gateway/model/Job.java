@@ -19,8 +19,14 @@ import jakarta.persistence.Table;
 public class Job {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @jakarta.persistence.PrePersist
+    public void ensureId() {
+        if (this.id == null || this.id.trim().isEmpty()) {
+            this.id = java.util.UUID.randomUUID().toString();
+        }
+    }
 
     private String title;
     private String company;

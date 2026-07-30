@@ -1,0 +1,9 @@
+{
+  "name": "ai-job-matcher",
+  "version": "1.0.0",
+  "description": "AI Job Matcher Microservices Application",
+  "main": "run_all.js",
+  "scripts": {
+    "start": "node run_all.js"
+  }
+}

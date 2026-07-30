@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Briefcase, Calendar, CheckCircle2, Clock, MapPin, Building2, ChevronRight, Award, Zap } from 'lucide-react';
+import { Briefcase, Calendar, CheckCircle2, Clock, MapPin, Building2, ChevronRight, Award, Zap, Search, ArrowRight } from 'lucide-react';
 import { applicationService } from '../services/api';
+import { Link } from 'react-router-dom';
 
 interface AppItem {
   id: string;
@@ -11,45 +12,6 @@ interface AppItem {
   appliedAt: string;
   matchScore: number;
 }
-
-const mockApps: AppItem[] = [
-  {
-    id: 'app-101',
-    jobTitle: 'Senior Full Stack AI Engineer',
-    company: 'TechCorp Innovation Lab',
-    location: 'San Francisco, CA',
-    status: 'interview',
-    appliedAt: '2026-07-25',
-    matchScore: 94
-  },
-  {
-    id: 'app-102',
-    jobTitle: 'Lead Frontend Architect',
-    company: 'StartupXYZ Tech',
-    location: 'Remote',
-    status: 'review',
-    appliedAt: '2026-07-26',
-    matchScore: 88
-  },
-  {
-    id: 'app-103',
-    jobTitle: 'Machine Learning Specialist',
-    company: 'AI Innovations',
-    location: 'New York, NY',
-    status: 'applied',
-    appliedAt: '2026-07-27',
-    matchScore: 82
-  },
-  {
-    id: 'app-104',
-    jobTitle: 'Cloud DevOps Specialist',
-    company: 'CloudTech Platform',
-    location: 'Remote',
-    status: 'offer',
-    appliedAt: '2026-07-20',
-    matchScore: 96
-  }
-];
 
 const statusColumns = [
   { key: 'applied', label: 'Applied', color: 'border-blue-500 text-blue-400 bg-blue-500/10' },
@@ -66,14 +28,66 @@ const Applications = () => {
     applicationService.getUserApplications()
       .then(res => {
         if (res && res.length > 0) {
-          setApps(res);
+          // Map API Application type to our AppItem display type
+          const mapped: AppItem[] = res.map((a: any) => ({
+            id: a.id || '',
+            jobTitle: a.jobTitle || a.job?.title || 'Unknown Position',
+            company: a.company || a.job?.company || 'Unknown Company',
+            location: a.location || a.job?.location || 'Remote',
+            status: a.status || 'applied',
+            appliedAt: a.appliedAt || a.createdAt || new Date().toISOString().split('T')[0],
+            matchScore: a.matchScore || 0,
+          }));
+          setApps(mapped);
         } else {
-          setApps(mockApps);
+          setApps([]);
         }
       })
-      .catch(() => setApps(mockApps))
+      .catch(() => setApps([]))
       .finally(() => setLoading(false));
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 space-y-4">
+        <div className="w-12 h-12 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin" />
+        <p className="text-sm text-cyan-400 font-semibold">Loading applications...</p>
+      </div>
+    );
+  }
+
+  // Empty state for new users
+  if (apps.length === 0) {
+    return (
+      <div className="space-y-8">
+        <div>
+          <div className="inline-flex items-center gap-2 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-1">
+            <Briefcase className="w-4 h-4" /> Application Tracker
+          </div>
+          <h1 className="text-3xl font-extrabold">My Job Applications</h1>
+        </div>
+
+        <div className="glass-panel p-12 text-center space-y-6">
+          <div className="w-20 h-20 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center mx-auto">
+            <Search className="w-10 h-10" />
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-2xl font-extrabold">No Applications Yet</h2>
+            <p className="text-sm text-gray-400 max-w-md mx-auto">
+              Browse AI-matched jobs and apply to positions that match your skills. Your applications will appear here for tracking.
+            </p>
+          </div>
+          <div className="flex gap-3 justify-center pt-2">
+            <Link to="/matches" className="gradient-btn px-6 py-3 rounded-xl text-sm font-bold flex items-center gap-2">
+              <Zap className="w-4 h-4" /> Browse Job Matches
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const interviewCount = apps.filter(a => a.status === 'interview').length;
 
   return (
     <div className="space-y-8">
@@ -90,7 +104,7 @@ const Applications = () => {
         </div>
 
         <div className="glass-panel px-4 py-2 text-xs font-bold text-green-400 flex items-center gap-2">
-          <Zap className="w-4 h-4" /> 1 Active Interview Scheduled
+          <Zap className="w-4 h-4" /> {apps.length} Total — {interviewCount} Interview{interviewCount !== 1 ? 's' : ''}
         </div>
       </div>
 

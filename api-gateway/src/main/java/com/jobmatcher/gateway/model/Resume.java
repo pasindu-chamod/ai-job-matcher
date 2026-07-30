@@ -10,8 +10,14 @@ import java.util.List;
 public class Resume {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @PrePersist
+    public void ensureId() {
+        if (this.id == null || this.id.trim().isEmpty()) {
+            this.id = java.util.UUID.randomUUID().toString();
+        }
+    }
 
     private String userId;
     private String fileName;

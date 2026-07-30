@@ -1,34 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ShieldCheck, CheckCircle2, Award, Hash, Lock, Cpu, Sparkles, Copy, ExternalLink } from 'lucide-react';
 import { blockchainService } from '../services/api';
 import { SkillVerification as SkillVerificationType } from '../types';
 
-const mockVerified: SkillVerificationType[] = [
-  {
-    skill: 'Python 3.11',
-    verified: true,
-    blockchainHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
-    issuedAt: '2026-07-28T14:30:00Z'
-  },
-  {
-    skill: 'React 18 & TypeScript',
-    verified: true,
-    blockchainHash: 'a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e',
-    issuedAt: '2026-07-27T09:15:00Z'
-  },
-  {
-    skill: 'Docker & Kubernetes',
-    verified: true,
-    blockchainHash: '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8',
-    issuedAt: '2026-07-26T18:45:00Z'
-  }
-];
-
 const SkillVerification: React.FC = () => {
   const [skill, setSkill] = useState('');
   const [verifying, setVerifying] = useState(false);
-  const [verifiedList, setVerifiedList] = useState<SkillVerificationType[]>(mockVerified);
+  const [verifiedList, setVerifiedList] = useState<SkillVerificationType[]>([]);
   const [latestVerification, setLatestVerification] = useState<SkillVerificationType | null>(null);
+  const [loadingList, setLoadingList] = useState(true);
+
+  // Fetch existing verifications for this user on mount
+  useEffect(() => {
+    blockchainService.getUserVerifications()
+      .then(res => setVerifiedList(res || []))
+      .catch(() => setVerifiedList([]))
+      .finally(() => setLoadingList(false));
+  }, []);
 
   const handleVerify = async () => {
     if (!skill.trim()) return;
@@ -155,22 +143,35 @@ const SkillVerification: React.FC = () => {
           <span className="text-xs text-purple-400 font-semibold">{verifiedList.length} Verified Skills</span>
         </h3>
 
-        <div className="space-y-3">
-          {verifiedList.map((item, idx) => (
-            <div key={idx} className="glass-card p-4 space-y-2 border border-gray-800 text-xs">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div className="flex items-center gap-2 font-bold text-sm text-cyan-300">
-                  <Award className="w-4 h-4 text-purple-400" />
-                  {item.skill}
-                </div>
-                <span className="text-[11px] text-gray-400">{new Date(item.issuedAt).toLocaleDateString()}</span>
-              </div>
-              <div className="p-2.5 rounded-lg bg-slate-900/80 font-mono text-gray-400 text-[10px] break-all border border-gray-800/60">
-                Hash: <span className="text-purple-300">{item.blockchainHash}</span>
-              </div>
+        {loadingList ? (
+          <div className="flex items-center justify-center py-8">
+            <div className="w-8 h-8 border-4 border-purple-400 border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : verifiedList.length === 0 ? (
+          <div className="text-center py-12 space-y-3">
+            <div className="w-16 h-16 rounded-2xl bg-purple-500/10 text-purple-400 flex items-center justify-center mx-auto">
+              <Award className="w-8 h-8" />
             </div>
-          ))}
-        </div>
+            <p className="text-sm text-gray-400">No verified skills yet. Use the form above to mint your first credential.</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {verifiedList.map((item, idx) => (
+              <div key={idx} className="glass-card p-4 space-y-2 border border-gray-800 text-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 font-bold text-sm text-cyan-300">
+                    <Award className="w-4 h-4 text-purple-400" />
+                    {item.skill}
+                  </div>
+                  <span className="text-[11px] text-gray-400">{new Date(item.issuedAt).toLocaleDateString()}</span>
+                </div>
+                <div className="p-2.5 rounded-lg bg-slate-900/80 font-mono text-gray-400 text-[10px] break-all border border-gray-800/60">
+                  Hash: <span className="text-purple-300">{item.blockchainHash}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,5 +1,7 @@
 package com.jobmatcher.gateway.controller;
 
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,14 +25,15 @@ public class ResumeController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<Resume> uploadResume(
+    public ResponseEntity<?> uploadResume(
             @RequestParam("file") MultipartFile file,
             @RequestParam(value = "userId", defaultValue = "user123") String userId) {
         try {
             Resume resume = resumeService.uploadAndAnalyze(file, userId);
             return ResponseEntity.ok(resume);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            String msg = e.getMessage() != null ? e.getMessage() : "Resume analysis failed.";
+            return ResponseEntity.status(500).body(Map.of("message", msg));
         }
     }
 }

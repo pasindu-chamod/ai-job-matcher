@@ -1,59 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-import { MapPin, DollarSign, Sparkles, CheckCircle2, AlertCircle, ArrowRight, Zap, Building2, Briefcase } from 'lucide-react';
+import { MapPin, DollarSign, Sparkles, CheckCircle2, AlertCircle, ArrowRight, Zap, Building2, Briefcase, Upload, Search } from 'lucide-react';
 import { matchService } from '../services/api';
 import { JobMatch } from '../types';
-
-const mockMatches: JobMatch[] = [
-  {
-    job: {
-      id: 'j1',
-      title: 'Senior Full Stack AI Engineer',
-      company: 'TechCorp Innovation Lab',
-      description: 'Architect and build scalable web applications integrated with OpenAI & LLM APIs. Python, React, Docker, Cloud.',
-      location: 'San Francisco, CA (Hybrid)',
-      salary: '$140,000 - $185,000',
-      type: 'Full-time',
-      requiredSkills: ['Python', 'React', 'Java', 'Spring', 'SQL', 'Docker']
-    },
-    matchScore: 94,
-    matchedSkills: ['Python', 'React', 'SQL', 'Docker'],
-    missingSkills: ['Java', 'Spring'],
-    reasoning: 'Exceptional match! You possess 4 key technical skills required for this AI-driven full stack position.'
-  },
-  {
-    job: {
-      id: 'j2',
-      title: 'Lead Frontend Architect',
-      company: 'StartupXYZ Tech',
-      description: 'Create high-performance user interfaces with React 18, TypeScript, TailwindCSS, and state management.',
-      location: 'Remote',
-      salary: '$110,000 - $150,000',
-      type: 'Full-time',
-      requiredSkills: ['React', 'TypeScript', 'JavaScript', 'HTML', 'CSS', 'Tailwind']
-    },
-    matchScore: 88,
-    matchedSkills: ['React', 'TypeScript', 'JavaScript', 'HTML', 'CSS'],
-    missingSkills: ['Tailwind'],
-    reasoning: 'Strong candidate. Adding TailwindCSS experience will bring your profile to a 100% match.'
-  },
-  {
-    job: {
-      id: 'j3',
-      title: 'Machine Learning & NLP Specialist',
-      company: 'AI Innovations Global',
-      description: 'Train transformer models, develop recommendation engines, and implement TF-IDF / vector search pipelines.',
-      location: 'New York, NY',
-      salary: '$150,000 - $195,000',
-      type: 'Full-time',
-      requiredSkills: ['Python', 'TensorFlow', 'PyTorch', 'Machine Learning', 'SQL']
-    },
-    matchScore: 82,
-    matchedSkills: ['Python', 'Machine Learning', 'SQL'],
-    missingSkills: ['TensorFlow', 'PyTorch'],
-    reasoning: 'Good match. Consider taking a PyTorch or TensorFlow certification to strengthen your application.'
-  }
-];
+import { Link } from 'react-router-dom';
 
 const JobMatches = () => {
   const [matches, setMatches] = useState<JobMatch[]>([]);
@@ -63,13 +13,9 @@ const JobMatches = () => {
   useEffect(() => {
     matchService.getMatches()
       .then(res => {
-        if (res && res.length > 0) {
-          setMatches(res);
-        } else {
-          setMatches(mockMatches);
-        }
+        setMatches(res && res.length > 0 ? res : []);
       })
-      .catch(() => setMatches(mockMatches))
+      .catch(() => setMatches([]))
       .finally(() => setLoading(false));
   }, []);
 
@@ -78,6 +24,37 @@ const JobMatches = () => {
       <div className="flex flex-col items-center justify-center py-20 space-y-4">
         <div className="w-12 h-12 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin" />
         <p className="text-sm text-cyan-400 font-semibold">Running TF-IDF AI Skill Matching Microservice...</p>
+      </div>
+    );
+  }
+
+  // Empty State — no matches found for this user
+  if (matches.length === 0) {
+    return (
+      <div className="space-y-8">
+        <div>
+          <div className="inline-flex items-center gap-2 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-1">
+            <Sparkles className="w-4 h-4" /> AI Recommendations
+          </div>
+          <h1 className="text-3xl font-extrabold">Matched Job Positions</h1>
+        </div>
+
+        <div className="glass-panel p-12 text-center space-y-6">
+          <div className="w-20 h-20 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mx-auto">
+            <Search className="w-10 h-10" />
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-2xl font-extrabold">No Job Matches Yet</h2>
+            <p className="text-sm text-gray-400 max-w-md mx-auto">
+              Upload your resume first so our AI can extract your skills and match you with the best job opportunities.
+            </p>
+          </div>
+          <div className="flex gap-3 justify-center pt-2">
+            <Link to="/upload" className="gradient-btn px-6 py-3 rounded-xl text-sm font-bold flex items-center gap-2">
+              <Upload className="w-4 h-4" /> Upload Resume
+            </Link>
+          </div>
+        </div>
       </div>
     );
   }

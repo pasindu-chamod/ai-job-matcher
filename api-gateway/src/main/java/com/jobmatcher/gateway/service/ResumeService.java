@@ -32,12 +32,24 @@ public class ResumeService {
     public Resume uploadAndAnalyze(MultipartFile file, String userId) {
         try {
             MultipartBodyBuilder builder = new MultipartBodyBuilder();
+            
+            MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
+            if (file.getContentType() != null && !file.getContentType().isEmpty()) {
+                try {
+                    mediaType = MediaType.parseMediaType(file.getContentType());
+                } catch (Exception ignored) {}
+            }
+
             builder.part("file", new ByteArrayResource(file.getBytes()) {
                 @Override
                 public String getFilename() {
                     return file.getOriginalFilename();
                 }
-            }).contentType(MediaType.APPLICATION_PDF);
+            }).contentType(mediaType);
+
+            if (userId != null && !userId.trim().isEmpty()) {
+                builder.part("userId", userId);
+            }
 
             Map<String, Object> result = webClientBuilder.build().post()
                     .uri(resumeUrl + "/analyze")
@@ -47,17 +59,29 @@ public class ResumeService {
                     .bodyToMono(Map.class)
                     .block();
 
+            if (result == null) {
+                throw new RuntimeException("Python resume microservice returned empty result.");
+            }
+
             Resume resume = new Resume();
             resume.setUserId(userId);
             resume.setFileName(file.getOriginalFilename());
             resume.setSkills((List<String>) result.get("skills"));
-            resume.setAtsScore((Integer) result.get("atsScore"));
+            
+            Number ats = (Number) result.get("atsScore");
+            resume.setAtsScore(ats != null ? ats.intValue() : 50);
+            
             resume.setStrengths((List<String>) result.get("strengths"));
             resume.setSuggestions((List<String>) result.get("suggestions"));
             resume.setSummary((String) result.get("summary"));
+            
+            Number exp = (Number) result.get("experienceYears");
+            resume.setExperienceYears(exp != null ? exp.intValue() : 0);
+
             return repo.save(resume);
         } catch (Exception e) {
-            throw new RuntimeException("Failed: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Resume analysis failed: " + e.getMessage(), e);
         }
     }
 
