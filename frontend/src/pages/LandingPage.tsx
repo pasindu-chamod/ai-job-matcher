@@ -13,7 +13,6 @@ import {
   Newspaper,
   ChevronRight,
   Target,
-  DollarSign,
   AlertCircle,
   BarChart3
 } from 'lucide-react';
@@ -32,35 +31,35 @@ const TARGET_ROLES: RolePreset[] = [
     id: 'fullstack-ai',
     title: 'Senior Full Stack AI Engineer',
     salary: '$140,000 - $185,000',
-    demand: '🔥 Very High (+140% Growth)',
+    demand: '🔥 Very High',
     requiredSkills: ['Python', 'React', 'TypeScript', 'Java', 'SQL', 'Docker', 'REST API', 'OpenAI']
   },
   {
     id: 'frontend-lead',
     title: 'Lead Frontend Architect',
     salary: '$110,000 - $150,000',
-    demand: '⚡ High (+85% Growth)',
+    demand: '⚡ High',
     requiredSkills: ['React', 'TypeScript', 'JavaScript', 'HTML', 'CSS', 'Tailwind', 'Next.js', 'Vite']
   },
   {
     id: 'devops-cloud',
     title: 'Cloud DevOps & Security Specialist',
     salary: '$120,000 - $160,000',
-    demand: '🚀 Critical (+110% Growth)',
+    demand: '🚀 Critical',
     requiredSkills: ['Docker', 'Kubernetes', 'AWS', 'Linux', 'Git', 'CI/CD', 'Terraform']
   },
   {
     id: 'ai-ml-nlp',
     title: 'Machine Learning & NLP Specialist',
     salary: '$150,000 - $195,000',
-    demand: '🧠 Top Rated (+165% Growth)',
+    demand: '🧠 Top Rated',
     requiredSkills: ['Python', 'TensorFlow', 'PyTorch', 'Machine Learning', 'SQL', 'NLP', 'Pandas']
   },
   {
     id: 'backend-java',
     title: 'Backend Microservices Developer',
     salary: '$115,000 - $155,000',
-    demand: '💼 Stable High (+60% Growth)',
+    demand: '💼 Stable High',
     requiredSkills: ['Java', 'Spring Boot', 'SQL', 'MySQL', 'Redis', 'REST API', 'Microservices']
   }
 ];
@@ -77,7 +76,6 @@ export const LandingPage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  // Interactive Live Simulator State
   const [selectedRole, setSelectedRole] = useState<RolePreset>(TARGET_ROLES[0]);
   const [selectedSkills, setSelectedSkills] = useState<string[]>(['Python', 'React', 'SQL', 'Docker']);
   const [customSkillInput, setCustomSkillInput] = useState('');
@@ -98,7 +96,6 @@ export const LandingPage: React.FC = () => {
     }
   };
 
-  // Live TF-IDF & Skill Match Calculation
   const reqSkills = selectedRole.requiredSkills;
   const userSkillsLower = selectedSkills.map(s => s.toLowerCase());
   const matchedSkills = reqSkills.filter(s => userSkillsLower.includes(s.toLowerCase()));
@@ -108,27 +105,25 @@ export const LandingPage: React.FC = () => {
     ? Math.min(Math.round((matchedSkills.length / reqSkills.length) * 100), 100)
     : 0;
 
-  // Real-world hiring advice based on live skills
   const getMarketFitAdvice = () => {
     if (matchPercentage >= 85) {
-      return "🎯 Outstanding Compatibility! Your profile places you in the top 5% candidate pool for this position.";
+      return "Outstanding compatibility! Your profile is in the top 5% candidate pool for this position.";
     } else if (matchPercentage >= 60) {
-      return `💡 Strong Technical Match! Adding experience in ${missingSkills[0] || 'cloud deployment'} will push your profile above 90%.`;
+      return `Strong technical match! Adding experience in ${missingSkills[0] || 'cloud deployment'} will push your profile above 90%.`;
     } else if (matchPercentage >= 30) {
-      return `📈 Developing Fit. Master ${missingSkills.slice(0, 2).join(' & ')} to unlock interview calls for this target role.`;
+      return `Developing fit. Master ${missingSkills.slice(0, 2).join(' & ')} to unlock interview calls for this role.`;
     } else {
-      return "🔍 Select more skills or pick a target role aligned with your background to see your match score increase.";
+      return "Select more skills or pick a target role aligned with your background to see your match score.";
     }
   };
 
-  // Tech News Data
   const newsItems = [
     {
       id: 1,
       category: 'AI Hiring Trends 2026',
       title: 'Full Stack & AI Engineer Demand Surges by 140% in 2026',
       date: 'July 2026',
-      snippet: 'Enterprise software companies are prioritizing developers who combine robust web framework experience (React/Spring) with Python AI microservices.',
+      snippet: 'Enterprise companies are prioritizing developers who combine React/Spring experience with Python AI microservices.',
       badge: 'Hot Trend'
     },
     {
@@ -136,7 +131,7 @@ export const LandingPage: React.FC = () => {
       category: 'Blockchain Security',
       title: 'Cryptographic Skill Passports Become Global Tech Standard',
       date: 'July 2026',
-      snippet: 'SHA-256 tamper-proof ledger hashes enable instant credential verification, eliminating background check delays for top software engineers.',
+      snippet: 'SHA-256 tamper-proof ledger hashes enable instant credential verification, eliminating background check delays.',
       badge: 'Innovation'
     },
     {
@@ -144,30 +139,30 @@ export const LandingPage: React.FC = () => {
       category: 'Career Growth',
       title: 'ATS-Optimized Resumes Increase Callback Rates by 3.5x',
       date: 'June 2026',
-      snippet: 'Advanced TF-IDF skill matching algorithms help job seekers pinpoint missing technical keywords before submitting applications.',
+      snippet: 'Advanced TF-IDF skill matching algorithms help job seekers pinpoint missing technical keywords before applying.',
       badge: 'Guide'
     }
   ];
 
   return (
-    <div className="space-y-20 pb-16 overflow-hidden">
+    <div className="space-y-20 pb-16">
       {/* HERO SECTION */}
-      <section className="relative pt-8 pb-16 text-center space-y-8 max-w-5xl mx-auto px-4">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -z-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse-glow" />
-        <div className="absolute top-20 right-10 -z-10 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl animate-pulse-glow" />
-
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-cyan-500/30 text-cyan-400 text-sm font-semibold animate-float">
-          <Sparkles className="w-4 h-4 text-cyan-400" />
-          <span>Next-Generation Microservices AI Hiring Platform</span>
+      <section className="pt-10 pb-16 text-center space-y-8 max-w-5xl mx-auto px-4">
+        <div
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold"
+          style={{ background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe' }}
+        >
+          <Sparkles className="w-4 h-4" />
+          <span>Next-Generation AI Hiring Platform</span>
         </div>
 
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight">
+        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight" style={{ color: 'var(--text-main)' }}>
           Land Your Tech Dream Role With <br />
           <span className="gradient-text">AI Precision & Blockchain Trust</span>
         </h1>
 
-        <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-          AI Job Matcher uses Python FastAPI microservices, TF-IDF skill matching algorithms, and SHA-256 blockchain verification to connect candidates with real tech opportunities.
+        <p className="text-lg md:text-xl max-w-3xl mx-auto leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+          AI Job Matcher uses Python FastAPI microservices, TF-IDF skill matching, and SHA-256 blockchain verification to connect candidates with real tech opportunities.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
@@ -188,7 +183,8 @@ export const LandingPage: React.FC = () => {
               </Link>
               <Link
                 to="/login"
-                className="glass-panel hover:bg-slate-800/80 text-white font-semibold px-8 py-4 rounded-xl text-lg border border-gray-700 transition"
+                className="font-semibold px-8 py-4 rounded-xl text-lg transition"
+                style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', color: 'var(--text-main)' }}
               >
                 Sign In
               </Link>
@@ -196,46 +192,42 @@ export const LandingPage: React.FC = () => {
           )}
         </div>
 
-        {/* LIVE STATS COUNTER */}
+        {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-12">
-          <div className="glass-card p-6 text-center">
-            <div className="text-3xl md:text-4xl font-extrabold gradient-text">12,450+</div>
-            <div className="text-xs md:text-sm text-gray-400 font-medium mt-1">Resumes Parsed</div>
-          </div>
-          <div className="glass-card p-6 text-center">
-            <div className="text-3xl md:text-4xl font-extrabold text-cyan-400">98.4%</div>
-            <div className="text-xs md:text-sm text-gray-400 font-medium mt-1">Match Accuracy</div>
-          </div>
-          <div className="glass-card p-6 text-center">
-            <div className="text-3xl md:text-4xl font-extrabold text-purple-400">8,920+</div>
-            <div className="text-xs md:text-sm text-gray-400 font-medium mt-1">Verified Credentials</div>
-          </div>
-          <div className="glass-card p-6 text-center">
-            <div className="text-3xl md:text-4xl font-extrabold text-green-400">450+</div>
-            <div className="text-xs md:text-sm text-gray-400 font-medium mt-1">Tech Partners</div>
-          </div>
+          {[
+            { value: '12,450+', label: 'Resumes Parsed', color: '#2563eb' },
+            { value: '98.4%', label: 'Match Accuracy', color: '#059669' },
+            { value: '8,920+', label: 'Verified Credentials', color: '#7c3aed' },
+            { value: '450+', label: 'Tech Partners', color: '#d97706' },
+          ].map(stat => (
+            <div key={stat.label} className="glass-card p-6 text-center">
+              <div className="text-3xl md:text-4xl font-extrabold" style={{ color: stat.color }}>{stat.value}</div>
+              <div className="text-xs md:text-sm font-medium mt-1" style={{ color: 'var(--text-muted)' }}>{stat.label}</div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* ADVANCED LIVE MATCH ENGINE SIMULATOR */}
+      {/* LIVE MATCH ENGINE SIMULATOR */}
       <section className="max-w-6xl mx-auto px-4">
-        <div className="glass-panel p-8 md:p-12 relative overflow-hidden space-y-8 border border-cyan-500/30">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-2xl" />
-
+        <div className="glass-panel p-8 md:p-12 space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 text-xs font-semibold">
-              <Zap className="w-3.5 h-3.5" /> Interactive Match Engine Simulator
+            <div
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold"
+              style={{ background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe' }}
+            >
+              <Zap className="w-3.5 h-3.5" /> Interactive Match Engine
             </div>
-            <h2 className="text-3xl font-extrabold">Test The AI Matching Engine Live</h2>
-            <p className="text-sm text-gray-400">
-              Select a target tech role and toggle technical skills to calculate real-time TF-IDF compatibility, salary estimates, and market fit.
+            <h2 className="text-3xl font-extrabold" style={{ color: 'var(--text-main)' }}>Test The AI Matching Engine Live</h2>
+            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+              Select a target tech role and toggle your skills to calculate real-time TF-IDF compatibility and market fit.
             </p>
           </div>
 
           {/* Target Role Selector */}
           <div className="space-y-3">
-            <label className="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-2">
-              <Target className="w-4 h-4 text-cyan-400" /> 1. Select Target Job Position:
+            <label className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--text-muted)' }}>
+              <Target className="w-4 h-4" style={{ color: '#2563eb' }} /> 1. Select Target Job Position:
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
               {TARGET_ROLES.map(role => {
@@ -244,14 +236,15 @@ export const LandingPage: React.FC = () => {
                   <button
                     key={role.id}
                     onClick={() => setSelectedRole(role)}
-                    className={`p-3.5 rounded-xl text-left transition-all flex flex-col justify-between border ${
-                      isSelected
-                        ? 'bg-gradient-to-br from-cyan-500/20 to-blue-600/30 border-cyan-400 text-white shadow-lg shadow-cyan-500/10'
-                        : 'glass-panel text-gray-400 hover:text-white border-gray-800'
-                    }`}
+                    className="p-3.5 rounded-xl text-left transition-all flex flex-col justify-between"
+                    style={{
+                      background: isSelected ? '#eff6ff' : 'var(--bg-secondary)',
+                      border: isSelected ? '2px solid #2563eb' : '1px solid var(--border-color)',
+                      color: isSelected ? '#1d4ed8' : 'var(--text-muted)',
+                    }}
                   >
                     <div className="font-bold text-xs leading-snug">{role.title}</div>
-                    <div className="text-[10px] text-green-400 font-semibold mt-2">{role.salary}</div>
+                    <div className="text-[10px] font-semibold mt-2" style={{ color: '#059669' }}>{role.salary}</div>
                   </button>
                 );
               })}
@@ -261,13 +254,13 @@ export const LandingPage: React.FC = () => {
           {/* Skills Picker */}
           <div className="grid lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-6">
-              <label className="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-2">
-                <BrainCircuit className="w-4 h-4 text-purple-400" /> 2. Toggle Your Technical Skills:
+              <label className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--text-muted)' }}>
+                <BrainCircuit className="w-4 h-4" style={{ color: '#7c3aed' }} /> 2. Toggle Your Technical Skills:
               </label>
 
               {Object.entries(CATEGORIZED_SKILLS).map(([category, skills]) => (
                 <div key={category} className="space-y-2">
-                  <div className="text-[11px] font-bold text-cyan-400 uppercase tracking-wider">{category}</div>
+                  <div className="text-[11px] font-bold uppercase tracking-wider" style={{ color: '#2563eb' }}>{category}</div>
                   <div className="flex flex-wrap gap-2">
                     {skills.map(skill => {
                       const isSelected = selectedSkills.includes(skill);
@@ -275,11 +268,12 @@ export const LandingPage: React.FC = () => {
                         <button
                           key={skill}
                           onClick={() => toggleSkill(skill)}
-                          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all border ${
-                            isSelected
-                              ? 'bg-cyan-500 text-slate-950 font-bold border-cyan-400 shadow-md shadow-cyan-500/20'
-                              : 'glass-panel text-gray-300 border-gray-700 hover:bg-slate-700/50'
-                          }`}
+                          className="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all"
+                          style={{
+                            background: isSelected ? '#2563eb' : 'var(--bg-secondary)',
+                            color: isSelected ? '#ffffff' : 'var(--text-muted)',
+                            border: isSelected ? '1px solid #2563eb' : '1px solid var(--border-color)',
+                          }}
                         >
                           {isSelected && <CheckCircle2 className="w-3.5 h-3.5 inline mr-1" />}
                           {skill}
@@ -290,63 +284,66 @@ export const LandingPage: React.FC = () => {
                 </div>
               ))}
 
-              {/* Add Custom Skill Form */}
               <form onSubmit={addCustomSkill} className="flex gap-2 pt-2">
                 <div className="relative flex-1">
-                  <Search className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
+                  <Search className="w-4 h-4 absolute left-3 top-3" style={{ color: 'var(--text-muted)' }} />
                   <input
                     type="text"
                     value={customSkillInput}
                     onChange={(e) => setCustomSkillInput(e.target.value)}
-                    placeholder="Add custom skill (e.g. PyTorch, GraphQL, NestJS)..."
-                    className="w-full pl-9 pr-4 py-2 bg-slate-800/60 border border-gray-700 rounded-xl text-xs text-white focus:outline-none focus:border-cyan-500"
+                    placeholder="Add custom skill (e.g. PyTorch, GraphQL)..."
+                    className="w-full pl-9 pr-4 py-2 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', color: 'var(--text-main)' }}
                   />
                 </div>
-                <button type="submit" className="glass-panel px-4 py-2 hover:bg-slate-700 font-bold text-xs rounded-xl text-cyan-400 border border-gray-700">
-                  Add Skill
+                <button
+                  type="submit"
+                  className="px-4 py-2 font-bold text-xs rounded-xl transition"
+                  style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', color: '#2563eb' }}
+                >
+                  Add
                 </button>
               </form>
             </div>
 
-            {/* Real-time Calculated Result Card */}
-            <div className="glass-card p-6 space-y-6 border border-cyan-500/30 flex flex-col justify-between">
+            {/* Match Result Card */}
+            <div className="glass-card p-6 space-y-6 flex flex-col justify-between" style={{ border: '1px solid #bfdbfe' }}>
               <div className="space-y-4">
-                <div className="flex items-center justify-between border-b border-gray-800 pb-3">
-                  <span className="text-xs uppercase font-bold text-gray-400">Match Compatibility</span>
-                  <span className="text-xs text-cyan-400 font-semibold">{selectedRole.demand}</span>
+                <div className="flex items-center justify-between pb-3" style={{ borderBottom: '1px solid var(--border-color)' }}>
+                  <span className="text-xs uppercase font-bold" style={{ color: 'var(--text-muted)' }}>Match Compatibility</span>
+                  <span className="text-xs font-semibold" style={{ color: '#2563eb' }}>{selectedRole.demand}</span>
                 </div>
 
                 <div className="text-center space-y-2">
                   <div className="text-5xl font-extrabold gradient-text">{matchPercentage}%</div>
-                  <div className="text-xs text-gray-300 font-bold">{selectedRole.title}</div>
-                  <div className="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                  <div className="text-xs font-bold" style={{ color: 'var(--text-main)' }}>{selectedRole.title}</div>
+                  <div className="w-full h-2.5 rounded-full overflow-hidden" style={{ background: '#e5e7eb' }}>
                     <div
-                      className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 h-full transition-all duration-500"
-                      style={{ width: `${matchPercentage}%` }}
+                      className="h-full rounded-full transition-all duration-500"
+                      style={{ width: `${matchPercentage}%`, background: '#2563eb' }}
                     />
                   </div>
                 </div>
 
-                {/* Matched vs Missing Skills breakdown */}
                 <div className="space-y-3 text-xs pt-2">
-                  <div className="p-3 rounded-xl bg-green-500/10 border border-green-500/20 space-y-1">
-                    <div className="font-bold text-green-400 flex items-center gap-1">
+                  <div className="p-3 rounded-xl" style={{ background: '#f0fdf4', border: '1px solid #bbf7d0' }}>
+                    <div className="font-bold flex items-center gap-1 mb-1" style={{ color: '#16a34a' }}>
                       <CheckCircle2 className="w-3.5 h-3.5" /> Matched Skills ({matchedSkills.length})
                     </div>
-                    <div className="text-gray-300 font-medium">{matchedSkills.join(', ') || 'None selected'}</div>
+                    <div style={{ color: 'var(--text-muted)' }}>{matchedSkills.join(', ') || 'None selected'}</div>
                   </div>
 
                   {missingSkills.length > 0 && (
-                    <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 space-y-1">
-                      <div className="font-bold text-amber-400 flex items-center gap-1">
-                        <AlertCircle className="w-3.5 h-3.5" /> Recommended to Learn ({missingSkills.length})
+                    <div className="p-3 rounded-xl" style={{ background: '#fffbeb', border: '1px solid #fde68a' }}>
+                      <div className="font-bold flex items-center gap-1 mb-1" style={{ color: '#d97706' }}>
+                        <AlertCircle className="w-3.5 h-3.5" /> To Learn ({missingSkills.length})
                       </div>
-                      <div className="text-gray-300 font-medium">{missingSkills.join(', ')}</div>
+                      <div style={{ color: 'var(--text-muted)' }}>{missingSkills.join(', ')}</div>
                     </div>
                   )}
                 </div>
 
-                <p className="text-xs text-gray-400 leading-relaxed italic bg-slate-900/60 p-3 rounded-xl border border-gray-800">
+                <p className="text-xs leading-relaxed p-3 rounded-xl italic" style={{ background: 'var(--bg-primary)', color: 'var(--text-muted)', border: '1px solid var(--border-color)' }}>
                   {getMarketFitAdvice()}
                 </p>
               </div>
@@ -362,58 +359,60 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* PLATFORM ARCHITECTURE FEATURES */}
+      {/* FEATURES */}
       <section className="max-w-6xl mx-auto px-4 space-y-12">
         <div className="text-center max-w-2xl mx-auto space-y-3">
-          <h2 className="text-3xl font-extrabold">Powered By Microservices Architecture</h2>
-          <p className="text-gray-400 text-sm">
+          <h2 className="text-3xl font-extrabold" style={{ color: 'var(--text-main)' }}>Powered By Microservices Architecture</h2>
+          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
             High-speed microservices using Spring Boot 3.2, Python FastAPI, MySQL, and SHA-256 Cryptographic Blockchain.
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          <div className="glass-card p-8 space-y-4 relative group">
-            <div className="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
-              <BrainCircuit className="w-6 h-6" />
+          {[
+            {
+              icon: BrainCircuit,
+              color: '#2563eb',
+              bg: '#eff6ff',
+              title: 'Python Resume Parser',
+              desc: 'Extracts tech keywords from PDF, DOCX, and TXT files. Generates dynamic ATS optimization scores and real improvement suggestions.'
+            },
+            {
+              icon: TrendingUp,
+              color: '#7c3aed',
+              bg: '#f5f3ff',
+              title: 'TF-IDF Matching Engine',
+              desc: 'Calculates real-time skill overlap percentages against live tech job postings, identifying matched vs missing skills for recruiters.'
+            },
+            {
+              icon: ShieldCheck,
+              color: '#059669',
+              bg: '#f0fdf4',
+              title: 'Blockchain Skill Passport',
+              desc: 'Mints immutable SHA-256 cryptographic hashes for candidate skills, offering tamper-proof verification to hiring managers.'
+            }
+          ].map(({ icon: Icon, color, bg, title, desc }) => (
+            <div key={title} className="glass-card p-8 space-y-4">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: bg }}>
+                <Icon className="w-6 h-6" style={{ color }} />
+              </div>
+              <h3 className="text-xl font-bold" style={{ color: 'var(--text-main)' }}>{title}</h3>
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>{desc}</p>
             </div>
-            <h3 className="text-xl font-bold">Python Resume Parser</h3>
-            <p className="text-gray-400 text-sm leading-relaxed">
-              Extracts tech keywords from PDF, DOCX, and TXT files with zero false positives. Generates dynamic ATS optimization scores and real suggestions.
-            </p>
-          </div>
-
-          <div className="glass-card p-8 space-y-4 relative group">
-            <div className="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center">
-              <TrendingUp className="w-6 h-6" />
-            </div>
-            <h3 className="text-xl font-bold">TF-IDF Matching Engine</h3>
-            <p className="text-gray-400 text-sm leading-relaxed">
-              Calculates real-time skill overlap percentages against live tech job postings, identifying matched vs missing skills for recruiters.
-            </p>
-          </div>
-
-          <div className="glass-card p-8 space-y-4 relative group">
-            <div className="w-12 h-12 rounded-xl bg-green-500/10 text-green-400 flex items-center justify-center">
-              <ShieldCheck className="w-6 h-6" />
-            </div>
-            <h3 className="text-xl font-bold">Blockchain Skill Passport</h3>
-            <p className="text-gray-400 text-sm leading-relaxed">
-              Mints immutable SHA-256 cryptographic hashes for candidate skills, offering tamper-proof verification to hiring managers.
-            </p>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* TECH NEWS & INDUSTRY INSIGHTS */}
+      {/* TECH NEWS */}
       <section className="max-w-6xl mx-auto px-4 space-y-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-800 pb-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4" style={{ borderBottom: '1px solid var(--border-color)' }}>
           <div>
-            <div className="flex items-center gap-2 text-cyan-400 text-xs font-semibold uppercase tracking-wider">
-              <Newspaper className="w-4 h-4" /> Live Market Insights
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider" style={{ color: '#2563eb' }}>
+              <Newspaper className="w-4 h-4" /> Market Insights
             </div>
-            <h2 className="text-2xl font-bold mt-1">Tech Hiring & Industry News</h2>
+            <h2 className="text-2xl font-bold mt-1" style={{ color: 'var(--text-main)' }}>Tech Hiring & Industry News</h2>
           </div>
-          <span className="text-xs text-gray-400">Updated Daily</span>
+          <span className="text-xs" style={{ color: 'var(--text-muted)' }}>Updated Daily</span>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
@@ -421,13 +420,13 @@ export const LandingPage: React.FC = () => {
             <div key={news.id} className="glass-card p-6 space-y-4 flex flex-col justify-between">
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 font-semibold">{news.badge}</span>
-                  <span className="text-gray-500">{news.date}</span>
+                  <span className="px-2.5 py-1 rounded-full font-semibold" style={{ background: '#eff6ff', color: '#2563eb' }}>{news.badge}</span>
+                  <span style={{ color: 'var(--text-muted)' }}>{news.date}</span>
                 </div>
-                <h3 className="font-bold text-lg leading-snug hover:text-cyan-400 transition cursor-pointer">{news.title}</h3>
-                <p className="text-xs text-gray-400 leading-relaxed">{news.snippet}</p>
+                <h3 className="font-bold text-lg leading-snug" style={{ color: 'var(--text-main)' }}>{news.title}</h3>
+                <p className="text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>{news.snippet}</p>
               </div>
-              <div className="pt-2 border-t border-gray-800/60 flex items-center justify-between text-xs text-cyan-400 font-semibold cursor-pointer">
+              <div className="pt-2 flex items-center justify-between text-xs font-semibold cursor-pointer" style={{ borderTop: '1px solid var(--border-color)', color: '#2563eb' }}>
                 <span>Read Full Article</span>
                 <ChevronRight className="w-4 h-4" />
               </div>
@@ -438,10 +437,9 @@ export const LandingPage: React.FC = () => {
 
       {/* CALL TO ACTION */}
       <section className="max-w-5xl mx-auto px-4">
-        <div className="glass-panel p-10 md:p-16 text-center space-y-6 relative overflow-hidden">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 w-96 h-96 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-full blur-3xl" />
-          <h2 className="text-3xl md:text-4xl font-extrabold">Ready to Accelerate Your Tech Career?</h2>
-          <p className="text-gray-300 text-sm md:text-base max-w-xl mx-auto">
+        <div className="glass-panel p-10 md:p-16 text-center space-y-6" style={{ background: '#eff6ff', border: '1px solid #bfdbfe' }}>
+          <h2 className="text-3xl md:text-4xl font-extrabold" style={{ color: '#1e3a8a' }}>Ready to Accelerate Your Tech Career?</h2>
+          <p className="text-sm md:text-base max-w-xl mx-auto" style={{ color: '#3b82f6' }}>
             Upload your resume, discover your AI job matches, verify your credentials on the blockchain, and track applications in real time.
           </p>
           <div className="pt-2">
@@ -453,18 +451,18 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* FOOTER */}
-      <footer className="max-w-6xl mx-auto px-4 pt-12 border-t border-gray-800/80 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-gray-400">
+      <footer className="max-w-6xl mx-auto px-4 pt-12 flex flex-col md:flex-row items-center justify-between gap-6 text-xs" style={{ borderTop: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>
         <div className="flex items-center gap-2">
-          <BrainCircuit className="w-5 h-5 text-cyan-400" />
-          <span className="font-bold text-sm text-white">AI Job Matcher</span>
+          <BrainCircuit className="w-5 h-5" style={{ color: '#2563eb' }} />
+          <span className="font-bold text-sm" style={{ color: 'var(--text-main)' }}>AI Job Matcher</span>
           <span>© 2026. All rights reserved.</span>
         </div>
         <div className="flex items-center gap-6">
-          <span className="hover:text-cyan-400 cursor-pointer">Privacy Policy</span>
-          <span className="hover:text-cyan-400 cursor-pointer">Terms of Service</span>
-          <span className="hover:text-cyan-400 cursor-pointer">API Docs</span>
-          <div className="flex items-center gap-2 text-green-400">
-            <span className="w-2 h-2 rounded-full bg-green-400 animate-ping" />
+          <span className="cursor-pointer hover:underline">Privacy Policy</span>
+          <span className="cursor-pointer hover:underline">Terms of Service</span>
+          <span className="cursor-pointer hover:underline">API Docs</span>
+          <div className="flex items-center gap-2" style={{ color: '#16a34a' }}>
+            <span className="w-2 h-2 rounded-full bg-green-400 inline-block" />
             <span>All Systems Operational</span>
           </div>
         </div>
