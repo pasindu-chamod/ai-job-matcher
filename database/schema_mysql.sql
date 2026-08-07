@@ -55,12 +55,14 @@ CREATE TABLE IF NOT EXISTS resume_skills (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS resume_strengths (
+    id VARCHAR(36) PRIMARY KEY,
     resume_id VARCHAR(36) NOT NULL,
     strength TEXT NOT NULL,
     CONSTRAINT fk_resume_strengths FOREIGN KEY (resume_id) REFERENCES resumes(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS resume_suggestions (
+    id VARCHAR(36) PRIMARY KEY,
     resume_id VARCHAR(36) NOT NULL,
     suggestion TEXT NOT NULL,
     CONSTRAINT fk_resume_suggestions FOREIGN KEY (resume_id) REFERENCES resumes(id) ON DELETE CASCADE
